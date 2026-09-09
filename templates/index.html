@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoiceShield AI</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        /* ================================
+           LOGIN SCREEN
+        ================================= */
+
+        #loginScreen {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background:
+                radial-gradient(circle at top left, #243b70, transparent 40%),
+                radial-gradient(circle at bottom right, #087f8c, transparent 40%),
+                linear-gradient(135deg, #07111f, #10284a);
+            padding: 20px;
+        }
+
+        .login-box {
+            width: 100%;
+            max-width: 430px;
+            padding: 42px 35px;
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.97);
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.35);
+            text-align: center;
+            animation: loginAppear 0.6s ease;
+        }
+
+        @keyframes loginAppear {
+            from {
+                opacity: 0;
+                transform: translateY(25px) scale(0.96);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .login-logo {
+            width: 82px;
+            height: 82px;
+            margin: 0 auto 18px;
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 42px;
+            background: linear-gradient(135deg, #1769ff, #00c6d7);
+            box-shadow: 0 12px 30px rgba(23, 105, 255, 0.3);
+        }
+
+        .login-box h1 {
+            margin: 0;
+            color: #10213f;
+            font-size: 30px;
+            font-weight: 800;
+        }
+
+        .login-subtitle {
+            margin: 8px 0 30px;
+            color: #667085;
+            font-size: 14px;
+        }
+
+        .login-field {
+            text-align: left;
+            margin-bottom: 18px;
+        }
+
+        .login-field label {
+            display: block;
+            margin-bottom: 7px;
+            color: #344054;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .login-field input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 14px 16px;
+            border: 1px solid #d0d5dd;
+            border-radius: 12px;
+            outline: none;
+            font-size: 15px;
+            transition: 0.2s;
+        }
+
+        .login-field input:focus {
+            border-color: #1769ff;
+            box-shadow: 0 0 0 4px rgba(23, 105, 255, 0.1);
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 15px;
+            margin-top: 8px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            color: white;
+            font-size: 16px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #1769ff, #00a8c6);
+            box-shadow: 0 10px 25px rgba(23, 105, 255, 0.25);
+            transition: 0.25s;
+        }
+
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 30px rgba(23, 105, 255, 0.35);
+        }
+
+        #loginMessage {
+            min-height: 20px;
+            margin-top: 15px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .login-security {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #eaecf0;
+            color: #667085;
+            font-size: 12px;
+        }
+
+        .login-security strong {
+            color: #12b76a;
+        }
+
+        /* Hide application before login */
+        #appContent {
+            display: none;
+        }
+
+        /* Logout button */
+        .logout-btn {
+            margin-left: 15px;
+            padding: 9px 15px;
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+    </style>
+</head>
+
+
+<body>
+
+<!-- =====================================================
+     LOGIN SCREEN
+====================================================== -->
+
+<div id="loginScreen">
+
+    <div class="login-box">
+
+        <div class="login-logo">
+            🛡️
+        </div>
+
+        <h1>VoiceShield AI</h1>
+
+        <p class="login-subtitle">
+            AI-Powered Voice Security System
+        </p>
+
+        <form onsubmit="loginUser(event)">
+
+            <div class="login-field">
+
+                <label for="loginUsername">
+                    Username
+                </label>
+
+                <input
+                    type="text"
+                    id="loginUsername"
+                    placeholder="Enter username"
+                    autocomplete="username"
+                    required>
+
+            </div>
+
+
+            <div class="login-field">
+
+                <label for="loginPassword">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="loginPassword"
+                    placeholder="Enter password"
+                    autocomplete="current-password"
+                    required>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="login-button">
+
+                🔐 Secure Login
+
+            </button>
+
+        </form>
+
+
+        <div id="loginMessage"></div>
+
+
+        <div class="login-security">
+
+            🛡️ Protected by
+            <strong>VoiceShield AI</strong>
+            <br>
+
+            Voice Cloning & Impersonation Detection
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     APPLICATION CONTENT
+====================================================== -->
+
+<div id="appContent">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <header class="top-header">
+
+        <div class="header-content">
+
+            <div class="brand">
+
+                <div class="brand-icon">
+                    🛡️
+                </div>
+
+                <div>
+
+                    <h1>
+                        VoiceShield AI
+                    </h1>
+
+                    <p>
+                        AI-Powered Voice Security System
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="system-status">
+
+                <span class="status-dot"></span>
+
+                System Online
+
+                <button
+                    type="button"
+                    class="logout-btn"
+                    onclick="logoutUser()">
+
+                    Logout
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         MAIN CONTAINER
+    ====================================================== -->
+
+    <main class="main-container">
+
+
+        <!-- =================================================
+             HERO SECTION
+        ================================================== -->
+
+        <section class="hero-section">
+
+            <div class="hero-content">
+
+                <span class="hero-badge">
+                    🤖 AI VOICE AUTHENTICITY ENGINE
+                </span>
+
+                <h2>
+                    Detect Voice Cloning
+                    <br>
+                    <span>Before It Becomes an Attack</span>
+                </h2>
+
+                <p>
+                    VoiceShield AI analyzes voice characteristics
+                    using machine learning to detect potential
+                    AI-generated and cloned voices.
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             LIVE VOICE RECORDING
+        ================================================== -->
+
+        <section class="recording-section">
+
+            <div class="section-title">
+
+                <h2>
+                    🎙️ Live Voice Input
+                </h2>
+
+                <p>
+                    Record a voice directly from your microphone
+                    for real-time authenticity analysis.
+                </p>
+
+            </div>
+
+
+            <div class="recording-card">
+
+
+                <!-- Recording status -->
+
+                <div
+                    id="recordingStatus"
+                    class="recording-status">
+
+                    🎙️ Ready to record
+
+                </div>
+
+
+                <!-- Timer -->
+
+                <div
+                    id="recordingTimer"
+                    class="recording-timer">
+
+                    00:00
+
+                </div>
+
+
+                <!-- Recording controls -->
+
+                <div class="recording-controls">
+
+                    <button
+                        type="button"
+                        id="startRecordingBtn"
+                        class="record-btn start-record-btn"
+                        onclick="startRecording()">
+
+                        🔴 Start Recording
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        id="stopRecordingBtn"
+                        class="record-btn stop-record-btn"
+                        onclick="stopRecording()"
+                        disabled>
+
+                        ⏹️ Stop Recording
+
+                    </button>
+
+                </div>
+
+
+                <!-- Recorded audio -->
+
+                <div
+                    id="recordedAudioContainer"
+                    class="recorded-audio-container">
+
+                    <p>
+                        No recording available yet.
+                    </p>
+
+                </div>
+
+
+                <!-- Analyze recorded voice -->
+
+                <button
+                    type="button"
+                    id="analyzeRecordingBtn"
+                    class="analyze-recording-btn"
+                    onclick="analyzeRecordedAudio()"
+                    disabled>
+
+                    🤖 Analyze Recorded Voice
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             AUDIO FILE ANALYSIS
+        ================================================== -->
+
+        <section class="analysis-section">
+
+            <div class="section-title">
+
+                <h2>
+                    🔊 Voice Authenticity Analysis
+                </h2>
+
+                <p>
+                    Upload an audio file and let VoiceShield AI
+                    analyze whether the voice is genuine or cloned.
+                </p>
+
+            </div>
+
+
+            <div class="upload-card">
+
+                <div class="upload-icon">
+                    🎧
+                </div>
+
+
+                <h3>
+                    Upload Voice Recording
+                </h3>
+
+
+                <p>
+                    Supported formats: WAV, MP3, FLAC, M4A
+                </p>
+
+
+                <div class="file-input-wrapper">
+
+                    <input
+                        type="file"
+                        id="audioFile"
+                        accept=".wav,.mp3,.flac,.m4a,audio/*">
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="analyze-btn"
+                    onclick="analyzeAudio()">
+
+                    🔍 Analyze Voice
+
+                </button>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 ANALYSIS RESULT
+            ================================================== -->
+
+            <div
+                id="result"
+                class="result-container">
+            </div>
+
+
+
+            <!-- =================================================
+                 SECURITY ALERT
+            ================================================== -->
+
+            <div
+                id="securityAlert"
+                class="security-alert-container">
+            </div>
+
+
+
+            <!-- =================================================
+                 IDENTITY VERIFICATION
+            ================================================== -->
+
+            <div
+                id="verification"
+                class="verification-container">
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             SECURITY DASHBOARD
+        ================================================== -->
+
+        <section class="dashboard-section">
+
+            <div class="section-title">
+
+                <h2>
+                    📊 Security Dashboard
+                </h2>
+
+                <p>
+                    Real-time overview of analyzed voice activity.
+                </p>
+
+            </div>
+
+
+            <div class="dashboard-grid">
+
+
+                <!-- Total -->
+
+                <div class="dashboard-card">
+
+                    <div class="dashboard-icon">
+                        📊
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Total Analyses
+                        </h3>
+
+                        <strong id="totalAnalyses">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Genuine -->
+
+                <div class="dashboard-card genuine-card">
+
+                    <div class="dashboard-icon">
+                        🟢
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Genuine Voices
+                        </h3>
+
+                        <strong id="genuineCount">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Threats -->
+
+                <div class="dashboard-card threat-card">
+
+                    <div class="dashboard-icon">
+                        🚨
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Threats Detected
+                        </h3>
+
+                        <strong id="threatCount">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Blocked -->
+
+                <div class="dashboard-card blocked-card">
+
+                    <div class="dashboard-icon">
+                        🚫
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Calls Blocked
+                        </h3>
+
+                        <strong id="blockedCount">
+                            0
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             SECURITY ANALYTICS
+        ================================================== -->
+
+        <section class="analytics-section">
+
+            <div class="section-title">
+
+                <h2>
+                    📈 Security Analytics
+                </h2>
+
+                <p>
+                    Visual summary of voice detection activity.
+                </p>
+
+            </div>
+
+
+            <div class="analytics-card">
+
+
+                <!-- Genuine -->
+
+                <div class="analytics-item">
+
+                    <div class="analytics-label">
+
+                        <span>
+                            🟢 Genuine Voices
+                        </span>
+
+                        <strong id="analyticsGenuine">
+                            0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="analytics-bar-background">
+
+                        <div
+                            id="genuineBar"
+                            class="analytics-bar genuine-bar"
+                            style="width: 0%;">
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Threats -->
+
+                <div class="analytics-item">
+
+                    <div class="analytics-label">
+
+                        <span>
+                            🔴 Threats Detected
+                        </span>
+
+                        <strong id="analyticsThreats">
+                            0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="analytics-bar-background">
+
+                        <div
+                            id="threatBar"
+                            class="analytics-bar threat-bar"
+                            style="width: 0%;">
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Blocked -->
+
+                <div class="analytics-item">
+
+                    <div class="analytics-label">
+
+                        <span>
+                            🚫 Calls Blocked
+                        </span>
+
+                        <strong id="analyticsBlocked">
+                            0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="analytics-bar-background">
+
+                        <div
+                            id="blockedBar"
+                            class="analytics-bar blocked-bar"
+                            style="width: 0%;">
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             ANALYSIS HISTORY
+        ================================================== -->
+
+        <section class="history-section">
+
+            <div class="section-title">
+
+                <h2>
+                    📋 Analysis History
+                </h2>
+
+                <p>
+                    Previous voice authenticity analysis records.
+                </p>
+
+            </div>
+
+
+            <div class="history-card">
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    ID
+                                </th>
+
+                                <th>
+                                    Date & Time
+                                </th>
+
+                                <th>
+                                    Audio File
+                                </th>
+
+                                <th>
+                                    Detection Result
+                                </th>
+
+                                <th>
+                                    Confidence
+                                </th>
+
+                                <th>
+                                    Risk
+                                </th>
+
+                                <th>
+                                    Security Action
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="historyBody">
+
+                            <tr>
+
+                                <td colspan="7">
+                                    No analysis history available.
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             FEATURES
+        ================================================== -->
+
+        <section class="features-section">
+
+            <div class="section-title">
+
+                <h2>
+                    🛡️ VoiceShield AI Capabilities
+                </h2>
+
+                <p>
+                    Security features designed to protect against
+                    voice cloning impersonation attacks.
+                </p>
+
+            </div>
+
+
+            <div class="features-grid">
+
+
+                <!-- Feature 1 -->
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        🤖
+                    </div>
+
+                    <h3>
+                        AI Voice Detection
+                    </h3>
+
+                    <p>
+                        Machine learning analyzes voice characteristics
+                        to identify potential synthetic or cloned audio.
+                    </p>
+
+                </div>
+
+
+
+                <!-- Feature 2 -->
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        🚨
+                    </div>
+
+                    <h3>
+                        Real-Time Threat Alert
+                    </h3>
+
+                    <p>
+                        Suspicious voice activity triggers an immediate
+                        security warning.
+                    </p>
+
+                </div>
+
+
+
+                <!-- Feature 3 -->
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        🔐
+                    </div>
+
+                    <h3>
+                        Identity Verification
+                    </h3>
+
+                    <p>
+                        Additional verification helps prevent unauthorized
+                        voice-based impersonation.
+                    </p>
+
+                </div>
+
+
+
+                <!-- Feature 4 -->
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        🚫
+                    </div>
+
+                    <h3>
+                        Call Prevention
+                    </h3>
+
+                    <p>
+                        High-risk suspicious calls can be blocked
+                        to prevent potential attacks.
+                    </p>
+
+                </div>
+
+
+
+                <!-- Feature 5 -->
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        📄
+                    </div>
+
+                    <h3>
+                        Forensic Reports
+                    </h3>
+
+                    <p>
+                        Generate professional forensic reports containing
+                        detection results and security recommendations.
+                    </p>
+
+                </div>
+
+
+
+                <!-- Feature 6 -->
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        📊
+                    </div>
+
+                    <h3>
+                        Security Analytics
+                    </h3>
+
+                    <p>
+                        Monitor voice analysis activity through a
+                        centralized security dashboard.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+    </main>
+
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer class="footer">
+
+        <div class="footer-content">
+
+            <div>
+
+                <strong>
+                    🛡️ VoiceShield AI
+                </strong>
+
+                <p>
+                    AI-powered protection against voice cloning
+                    impersonation attacks.
+                </p>
+
+            </div>
+
+
+            <div class="footer-right">
+
+                <span>
+                    Secure Voice. Trusted Identity.
+                </span>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+
+</div>
+
+
+<!-- =====================================================
+     LOGIN JAVASCRIPT
+====================================================== -->
+
+<script>
+
+    function loginUser(event) {
+
+        event.preventDefault();
+
+        const username =
+            document.getElementById("loginUsername").value.trim();
+
+        const password =
+            document.getElementById("loginPassword").value;
+
+        const message =
+            document.getElementById("loginMessage");
+
+        /*
+         * GitHub-safe demo login.
+         * No password is stored in the public source code.
+         */
+        if (username === "admin" && password.trim() !== "") {
+
+            message.innerHTML =
+                "✅ Login successful! Opening VoiceShield AI...";
+
+            message.style.color = "#12b76a";
+
+            setTimeout(function () {
+
+                document.getElementById("loginScreen").style.display =
+                    "none";
+
+                document.getElementById("appContent").style.display =
+                    "block";
+
+                sessionStorage.setItem(
+                    "voiceShieldLoggedIn",
+                    "true"
+                );
+
+            }, 500);
+
+        } else {
+
+            message.innerHTML =
+                "❌ Please enter the demo username and password.";
+
+            message.style.color = "#d92d20";
+
+        }
+
+    }
+
+
+
+    function logoutUser() {
+
+        sessionStorage.removeItem(
+            "voiceShieldLoggedIn"
+        );
+
+        document.getElementById("appContent").style.display =
+            "none";
+
+        document.getElementById("loginScreen").style.display =
+            "flex";
+
+        document.getElementById("loginUsername").value =
+            "";
+
+        document.getElementById("loginPassword").value =
+            "";
+
+        document.getElementById("loginMessage").innerHTML =
+            "";
+
+    }
+
+
+
+    window.addEventListener("DOMContentLoaded", function () {
+
+        const loggedIn =
+            sessionStorage.getItem(
+                "voiceShieldLoggedIn"
+            );
+
+        if (loggedIn === "true") {
+
+            document.getElementById("loginScreen").style.display =
+                "none";
+
+            document.getElementById("appContent").style.display =
+                "block";
+
+        }
+
+    });
+
+</script>
+
+
+<!-- =====================================================
+     EXISTING VOICESHIELD JAVASCRIPT
+====================================================== -->
+
+<script
+    src="{{ url_for('static', filename='script.js') }}">
+</script>
+
+
+</body>
+
+</html>
